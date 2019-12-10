@@ -108,7 +108,11 @@ class Notification
    * a new instance of Notification.
    */
 
-  private function __construct() { }
+  private function __construct()
+  {
+    $this->priority = self::PRIORITY_NORMAL;
+    $this->expires_at = strtotime('+30 days');
+  }
 
   /**
    * Creates a new notification. Returns the newly created notification to be
