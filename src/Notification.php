@@ -411,7 +411,7 @@ class Notification
   public function setExpirationDate(string $date): Notification
   {
     $max_days = self::MAX_EXPIRATION_DAYS;
-    $max_expiration =  $max_days * 24 * 60 * 60;
+    $max_expiration =  time() + ($max_days * 24 * 60 * 60);
     $expires_at = strtotime($date);
 
     if ($expires_at <= $max_expiration) {
