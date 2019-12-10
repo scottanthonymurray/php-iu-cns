@@ -22,7 +22,71 @@ namespace Edu\Iu\Notifications;
 
 class Notification
 {
+
+  /**
+   * Maximum title length.
+   *
+   * @var int
+   */
+
+  const MAX_TITLE_LENGTH = 50;
+
+  /**
+   * Maximum summary length.
+   *
+   * @var int
+   */
+
+  const MAX_SUMMARY_LENGTH = 100;
+
+  /**
+   * Maximum SMS description length.
+   *
+   * @var int
+   */
+
+  const MAX_SMS_DESCRIPTION_LENGTH = 400;
   
+  /**
+   * Maximum call to action URL length.
+   *
+   * @var int
+   */
+
+  const MAX_URL_LENGTH = 2000;
+
+  /**
+   * Maximum notification type name length.
+   *
+   * @var int
+   */
+
+  const MAX_TYPE_NAME_LENGTH = 100;
+
+  /**
+   * Maximum username length.
+   *
+   * @var int
+   */
+
+  const MAX_USERNAME_LENGTH = 100;
+
+  /**
+   * Maximum email length.
+   *
+   * @var int
+   */
+
+  const MAX_EMAIL_LENGTH = 100;
+
+  /**
+   * Maximum days before a notification expires.
+   *
+   * @var int
+   */
+
+  const MAX_EXPIRATION_DAYS = 30;
+
   /**
    * Returns a JSON representation of the notification.
    *
