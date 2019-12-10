@@ -104,6 +104,78 @@ class Notification
   const PRIORITY_URGENT = 'URGENT';
 
   /**
+   * Notification title.
+   *
+   * @var string
+   */
+
+  private $title;
+
+  /**
+   * Notification summary.
+   *
+   * @var string
+   */
+
+  private $summary;
+
+  /**
+   * Notification SMS description.
+   *
+   * @var string
+   */
+
+  private $sms_description;
+
+  /**
+   * Notification priority.
+   *
+   * @var string
+   */
+
+  private $priority;
+
+  /**
+   * Notification action URLs.
+   *
+   * @var array
+   */
+
+  private $action_url = [];
+
+  /**
+   * Notification type.
+   *
+   * @var string
+   */
+
+  private $type;
+
+  /**
+   * Notification expiration date as Unix timestamp.
+   *
+   * @var int
+   */
+
+  private $expires_at;
+
+  /**
+   * Notification reply-to email address.
+   *
+   * @var string
+   */
+
+  private $reply_to;
+
+  /**
+   * Notification recipients.
+   *
+   * @var array
+   */
+
+  private $recipients = [];
+
+  /**
    * Private constructor. Use the Notification::create static method to create
    * a new instance of Notification.
    */
@@ -111,7 +183,13 @@ class Notification
   private function __construct()
   {
     $this->priority = self::PRIORITY_NORMAL;
+
     $this->expires_at = strtotime('+30 days');
+
+    $this->action_url = [
+      'primary' => null,
+      'secondary' => null
+    ];
   }
 
   /**
