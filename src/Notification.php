@@ -24,70 +24,6 @@ class Notification
 {
 
   /**
-   * Maximum title length.
-   *
-   * @var int
-   */
-
-  const MAX_TITLE_LENGTH = 50;
-
-  /**
-   * Maximum summary length.
-   *
-   * @var int
-   */
-
-  const MAX_SUMMARY_LENGTH = 100;
-
-  /**
-   * Maximum SMS description length.
-   *
-   * @var int
-   */
-
-  const MAX_SMS_DESCRIPTION_LENGTH = 400;
-  
-  /**
-   * Maximum call to action URL length.
-   *
-   * @var int
-   */
-
-  const MAX_URL_LENGTH = 2000;
-
-  /**
-   * Maximum notification type name length.
-   *
-   * @var int
-   */
-
-  const MAX_TYPE_NAME_LENGTH = 100;
-
-  /**
-   * Maximum username length.
-   *
-   * @var int
-   */
-
-  const MAX_USERNAME_LENGTH = 100;
-
-  /**
-   * Maximum email length.
-   *
-   * @var int
-   */
-
-  const MAX_EMAIL_LENGTH = 100;
-
-  /**
-   * Maximum days before a notification expires.
-   *
-   * @var int
-   */
-
-  const MAX_EXPIRATION_DAYS = 30;
-
-  /**
    * Normal priority flag.
    *
    * @var string
@@ -109,7 +45,7 @@ class Notification
    * @var string
    */
 
-  private $title;
+  public $title;
 
   /**
    * Notification summary.
@@ -117,7 +53,7 @@ class Notification
    * @var string
    */
 
-  private $summary;
+  public $summary;
 
   /**
    * Notification SMS description.
@@ -125,7 +61,7 @@ class Notification
    * @var string
    */
 
-  private $sms_description;
+  public $sms_description;
 
   /**
    * Notification priority.
@@ -133,15 +69,23 @@ class Notification
    * @var string
    */
 
-  private $priority;
+  public $priority;
 
   /**
-   * Notification action URLs.
+   * Notification primary action URL.
    *
-   * @var array
+   * @var string
    */
 
-  private $action_url = [];
+  public $primary_action_url;
+
+  /**
+   * Notification secondary action URL.
+   *
+   * @var string
+   */
+
+  public $secondary_action_url;
 
   /**
    * Notification type.
@@ -149,7 +93,7 @@ class Notification
    * @var string
    */
 
-  private $type;
+  public $type;
 
   /**
    * Notification expiration date as Unix timestamp.
@@ -157,7 +101,7 @@ class Notification
    * @var int
    */
 
-  private $expires_at;
+  public $expires_at;
 
   /**
    * Notification reply-to email address.
@@ -165,7 +109,7 @@ class Notification
    * @var string
    */
 
-  private $reply_to;
+  public $reply_to;
 
   /**
    * Notification recipients.
@@ -173,265 +117,39 @@ class Notification
    * @var array
    */
 
-  private $recipients = [];
+  public $recipients = [];
 
   /**
-   * Private constructor. Use the Notification::create static method to create
-   * a new instance of Notification.
+   * Constructor.
+   *
+   * @param string $title       Title
+   * @param string $description Description
+   * @param string $type        Type as defined in CNS application
+   * @param array  $recipients  Recipients
    */
 
-  private function __construct()
-  {
+  public function __construct(
+    string $title,
+    string $description,
+    string $type,
+    array  $recipients
+  ) {
     $this->priority = self::PRIORITY_NORMAL;
-
     $this->expires_at = strtotime('+30 days');
-
-    $this->action_url = [
-      'primary' => null,
-      'secondary' => null
-    ];
-  }
-
-  /**
-   * Creates a new notification. Returns the newly created notification to be
-   * populated with data via a fluent interface.
-   *
-   * @return Notification
-   */
-
-  public static function create(): Notification
-  {
-    return new self();
-  }
-
-  /**
-   * Sets the notification's title. Returns the notification to enable a
-   * fluent interface.
-   *
-   * @param  string $title Notification title
-   * @return Notification
-   */
-
-  public function setTitle(string $title): Notification
-  {
-    $max = self::MAX_TITLE_LENGTH;
-
-    if (strlen($title) <= $max) {
-      $this->title = $title;
-
-      return $this;
-    } else {
-      throw new \LengthException(
-        "Notification title cannot exceed $max characters"
-      );
-    }
-  }
-
-  /**
-   * Sets the notification's summary text. Returns the notification to enable
-   * a fluent interface.
-   *
-   * @param  string $summary Notification summary text
-   * @return Notification
-   */
-
-  public function setSummary(string $summary): Notification
-  {
-    $max = self::MAX_SUMMARY_LENGTH;
-
-    if (strlen($summary) <= $max) {
-      $this->summary = $summary;
-
-      return $this;
-    } else {
-      throw new \LengthException(
-        "Notification summary text cannot exceed $max characters"
-      );
-    }
-  }
-
-  /**
-   * Sets the notification's SMS description. Returns the notification to
-   * enable a fluent interface.
-   *
-   * @param  string $sms_description Notification SMS description
-   * @return Notification
-   */
-
-  public function setSmsDescription(string $sms_description): Notification
-  {
-    $max = self::MAX_SMS_DESCRIPTION_LENGTH;
-
-    if (strlen($sms_description) <= $max) {
-      $this->sms_description = $sms_description;
-
-      return $this;
-    } else {
-      throw new \LengthException(
-        "Notification SMS description cannot exceed $max characters"
-      );
-    }
-  }
-
-  /**
-   * Sets the notification's primary action URL. Returns the notification to
-   * enable a fluent interface.
-   *
-   * @param  string $url Notification primary action URL
-   * @return Notification
-   */
-
-  public function setPrimaryActionUrl(string $url): Notification
-  {
-    $max = self::MAX_URL_LENGTH;
-
-    if (strlen($url) <= $max) {
-      $this->action_url->primary = $url;
-
-      return $this;
-    } else {
-      throw new \LengthException(
-        "Notification action URL cannot exceed $max characters"
-      );
-    }
-  }
-
-  /**
-   * Sets the notification's secondary action URL. Returns the notification to
-   * enable a fluent interface.
-   *
-   * @param  string $url Notification secondary action URL
-   * @return Notification
-   */
-
-  public function setSecondaryActionUrl(string $url): Notification
-  {
-    $max = self::MAX_URL_LENGTH;
-
-    if (strlen($url) <= $max) {
-      $this->action_url->secondary = $url;
-
-      return $this;
-    } else {
-      throw new \LengthException(
-        "Notification action URL cannot exceed $max characters"
-      );
-    }
-  }
-
-  /**
-   * Sets the notification's type. The type must be registered in the Central
-   * Notification Service application. Returns the notification to enable a
-   * fluent interface.
-   *
-   * @param  string $url Notification type
-   * @return Notification
-   */
-
-  public function setType(string $type): Notification
-  {
-    $max = self::MAX_TYPE_NAME_LENGTH;
-
-    if (strlen($type) <= $max) {
-      $this->type = $type;
-
-      return $this;
-    } else {
-      throw new \LengthException(
-        "Notification type name cannot exceed $max characters"
-      );
-    }
-  }
-
-  /**
-   * Sets the notification's reply-to email address. Returns the notification
-   * to enable a fluent interface.
-   *
-   * @param  string $email Notification reply-to email address
-   * @return Notification
-   */
-
-  public function setReplyToEmail(string $email): Notification
-  {
-    $max = self::MAX_EMAIL_LENGTH;
-
-    if (strlen($email) <= $max) {
-      $this->reply_to = $email;
-
-      return $this;
-    } else {
-      throw new \LengthException(
-        "Notification reply-to email address cannot exceed $max characters"
-      );
-    }
-  }
-
-  /**
-   * Adds a recipient to the notification. Returns the notification to enable
-   * a fluent interface.
-   *
-   * @param  string $username Recipient username
-   * @param  string $email    Recipient email address
-   * @return Notification
-   */
-
-  public function addRecipient(string $username, string $email): Notification
-  {
-    $max_username_length = self::MAX_USERNAME_LENGTH;
-    $max_email_length = self::MAX_EMAIL_LENGTH;
-
-    if (strlen($username) > $max_username_length) {
-      throw new \LengthException(
-        "Recipient username cannot exceed $max_username_length characters"
-      );
-    }
-
-    if (strlen($email) > $max_email_length) {
-      throw new \LengthException(
-        "Recipient email address cannot exceed $max_email_length characters"
-      );
-    }
-
-    $this->recipients[] = [
-      'username' => $username,
-      'email' => $email
-    ];
-
-    return $this;
-  }
-
-  /**
-   * Sets the notification's expiration date. Returns the notification to
-   * enable a fluent interface.
-   *
-   * @param  string $date Notification expiration date in YYYY-MM-DD format
-   * @return Notification
-   */
-
-  public function setExpirationDate(string $date): Notification
-  {
-    $max_days = self::MAX_EXPIRATION_DAYS;
-    $max_expiration =  time() + ($max_days * 24 * 60 * 60);
-    $expires_at = strtotime($date);
-
-    if ($expires_at <= $max_expiration) {
-      $this->expires_at = $expires_at;
-      return $this;
-    } else {
-      throw new \InvalidArgumentException(
-        "Expiration date must be no more than $max_days days into the future"
-      );
-    }
+    $this->title = $title;
+    $this->description = $description;
+    $this->type = $type;
+    $this->recipients = $recipients;
   }
 
   /**
    * Flags the notification as urgent. Returns the notification to enable a
    * fluent interface.
    *
-   * @return Notification
+   * @return void
    */
 
-  public function flagAsUrgent(): Notification
+  public function flagAsUrgent(): void
   {
     $this->priorty = self::PRIORITY_URGENT;
   }
@@ -449,8 +167,8 @@ class Notification
       'summary' => $this->summary,
       'smsDescription' => $this->sms_description,
       'priority' => $this->priority,
-      'primaryActionURL' => $this->action_url->primary,
-      'secondaryActionURL' => $this->action_url->secondary,
+      'primaryActionURL' => $this->primary_action_url,
+      'secondaryActionURL' => $this->secondary_action_url,
       'notificationType' => $this->type,
       'expirationDate' => $this->expires_at,
       'replyTo' => $this->reply_to,
