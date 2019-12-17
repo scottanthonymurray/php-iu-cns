@@ -84,8 +84,28 @@ class NotificationService
 
   public function pushNotification(Notification $notification): void
   {
+    $this->validateNotification($notification);
     $this->fetchAuthToken();
     $this->postNotificationToService($notification);
+  }
+
+  /**
+   * Validates a notification to be sent. Throws an InvalidArgumentException
+   * if validation errors were encountered.
+   *
+   * @param  Notification $notification Notification to validate
+   * @return void
+   */
+
+  private function validateNotification(Notification $notification): void
+  {
+    $validator = new NotificationValidator();
+
+    if ( ! $validator->validate($notification)) {
+      throw new \InvalidArgumentException(
+        implode("\n", $validator->getErrors())
+      );
+    }
   }
 
   /**
