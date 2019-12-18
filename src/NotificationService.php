@@ -130,7 +130,24 @@ class NotificationService
 
   private function postNotificationToService(Notification $notification): void
   {
+    $json = $notification->getJson();
+    $request = curl_init();
 
+    curl_setopt_array($request, [
+      CURLOPT_URL => self::API_URL,
+      CURLOPT_POST => true,
+      CURLOPT_POSTFIELDS => $json,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_HTTPHEADER => [
+        'Authorization: Bearer ' . $this->auth_token,
+        'Content-Type: application/json;charset=UTF-8',
+        'Accept: application/hal+json;version=1',
+        'Content-Length: ' . strlen($json)
+      ]
+    ]);
+
+    curl_exec($request);
+    curl_close($request);
   }
 
 }
