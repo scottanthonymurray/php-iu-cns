@@ -1,5 +1,5 @@
 {
-    "name": "indiana-university/php-cns",
+    "name": "scottanthonymurray/php-iu-cns",
     "description": "PHP client library for Indiana University's Central Notification Service",
     "type": "library",
     "license": "BSD-3",
