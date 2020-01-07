@@ -1,0 +1,13 @@
+{
+    "name": "indiana-university/php-cns",
+    "description": "PHP client library for Indiana University's Central Notification Service",
+    "type": "library",
+    "license": "BSD-3",
+    "authors": [
+        {
+            "name": "Scott Anthony Murray",
+            "email": "scanmurr@iu.edu"
+        }
+    ],
+    "require": {}
+}
